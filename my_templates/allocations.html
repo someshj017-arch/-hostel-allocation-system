@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>All Allocations</h2>
+<table>
+    <tr><th>Student</th><th>Hostel</th><th>Room</th><th>Status</th><th>Action</th></tr>
+    {% for a in allocations %}
+    <tr>
+        <td>{{ a.student_name }}</td><td>{{ a.hostel_name }}</td><td>{{ a.room_number }}</td><td>{{ a.status }}</td>
+        <td>
+            {% if a.status == 'Active' %}
+            <form method="POST" action="/vacate/{{ a.allocation_id }}">
+                <button type="submit">Vacate</button>
+            </form>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

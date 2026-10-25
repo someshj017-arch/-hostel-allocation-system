@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Room Availability</h2>
+<table>
+    <tr><th>Hostel</th><th>Room</th><th>Capacity</th><th>Occupied</th><th>Available Beds</th></tr>
+    {% for r in rooms %}
+    <tr>
+        <td>{{ r.hostel_name }}</td><td>{{ r.room_number }}</td><td>{{ r.capacity }}</td><td>{{ r.current_occupancy }}</td><td><strong>{{ r.available_beds }}</strong></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

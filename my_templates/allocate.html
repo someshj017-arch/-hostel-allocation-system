@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Allocate a Room</h2>
+<form method="POST" style="display: flex; flex-direction: column; width: 300px; gap: 10px;">
+    <label>Student:</label>
+    <select name="student_id">
+        {% for s in students %}
+        <option value="{{ s.student_id }}">{{ s.name }}</option>
+        {% endfor %}
+    </select>
+    <label>Hostel:</label>
+    <select name="hostel_id">
+        {% for h in hostels %}
+        <option value="{{ h.hostel_id }}">{{ h.hostel_name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Allocate Room</button>
+</form>
+{% endblock %}
