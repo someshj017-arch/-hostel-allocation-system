@@ -52,25 +52,34 @@ def allocate():
         db = get_db()
         cursor = db.cursor(dictionary=True)
         try:
+            # 1. EXPLICITLY START THE TRANSACTION
+            cursor.execute("START TRANSACTION;")
+            
+            # 2. Lock the row and check capacity
             cursor.execute("""
                 SELECT room_id FROM Room
                 WHERE hostel_id = %s AND current_occupancy < capacity
                 LIMIT 1 FOR UPDATE
             """, (hostel_id,))
             room = cursor.fetchone()
+            
             if not room:
                 flash('No available rooms in this hostel!', 'error')
                 return redirect(url_for('allocate'))
+                
             cursor.execute("""
                 INSERT INTO Allocation (student_id, room_id, allocation_date, status)
                 VALUES (%s, %s, %s, 'Active')
             """, (student_id, room['room_id'], date.today()))
+            
             cursor.execute("""
                 UPDATE Room SET current_occupancy = current_occupancy + 1
                 WHERE room_id = %s
             """, (room['room_id'],))
+            
             db.commit()
             flash(f'Room allocated successfully! Room ID: {room["room_id"]}', 'success')
+            
         except mysql.connector.Error as e:
             db.rollback()
             flash(f'Error: {e}', 'error')
